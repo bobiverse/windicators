@@ -134,8 +134,14 @@ func (iw *IndicatorWindow) IsRunning() bool {
 func (iw *IndicatorWindow) Run() error {
 	iw.chRedraw = make(chan bool)
 
-	// No need for super-fast recheck
+	// No need for superfast recheck
 	tickEvents := time.NewTicker(250 * time.Millisecond)
+
+	// Trigger all components in background go-routine
+	go func() {
+		<-time.After(1 * time.Second) // wait so `for..select..` loop kicks in
+		iw.components.CheckAll()
+	}()
 
 	for {
 		select {

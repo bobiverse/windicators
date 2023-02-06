@@ -19,8 +19,6 @@ type Component struct {
 	fnCheck     func(c *Component) any
 	fnCheckTick *time.Ticker
 
-	URL string
-
 	Font glfont.Font
 	*ComponentMetrics
 

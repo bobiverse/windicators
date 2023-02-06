@@ -33,3 +33,10 @@ func (complist ComponentList) FilterVisible() ComponentList {
 	}
 	return list
 }
+
+// CheckAll - trigger check for every component
+func (complist ComponentList) CheckAll() {
+	for _, c := range complist {
+		c.Check()
+	}
+}
