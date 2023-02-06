@@ -84,3 +84,9 @@ type IndicatorWindow struct {
 	}, 2*time.Second)
 ```
 ![](demo.gif)
+
+### TODO's
+- [ ] Test/Fix for other OS's
+- [ ] Window auto resize for indicators visible
+- [ ] Vertical display
+- [ ] Add real-life examples under `examples/` folder
