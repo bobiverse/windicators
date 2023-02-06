@@ -8,18 +8,18 @@ _Tested on Ubuntu_.
 #### Example
 ```go
 func main() {
-	// Define window size and position
+    // Define window size and position
     iw, _ := wi.NewIndicatorWindow(200, 20, wi.PositionCenterBottom)
     defer glfw.Terminate()
     
-	// First indicator component 
+    // First indicator component 
     wi.NewComponent(iw, "demo-rand", "Demo(%v)", func (c *wi.Component) any {
         r := rand.Intn(10) // simulate some background job/api call
         c.IsVisible = r > 3 // when to show
         return r            // return value
     }, 2*time.Second)
     	
-	// Second indicator component 
+    // Second indicator component 
     wi.NewComponent(iw, "demo-dummy-emails", "Unread->%v", func (c *wi.Component) any {
         unreadCount := myFuncFetchEmails()
         c.IsVisible = unreadCount > 0
