@@ -9,25 +9,25 @@ _Tested on Ubuntu_.
 ```go
 func main() {
     // Define window size and position
-    iw, _ := wi.NewIndicatorWindow(200, 20, wi.PositionCenterBottom)
+    iw, _ := windicators.NewIndicatorWindow(200, 20, windicators.PositionCenterBottom)
     defer glfw.Terminate()
     
     // First indicator component 
-    wi.NewComponent(iw, "demo-rand", "Demo(%v)", func (c *wi.Component) any {
+    windicators.NewComponent(iw, "demo-rand", "Demo(%v)", func (c *windicators.Component) any {
         r := rand.Intn(10) // simulate some background job/api call
         c.IsVisible = r > 3 // when to show
         return r            // return value
     }, 2*time.Second)
     	
     // Second indicator component 
-    wi.NewComponent(iw, "demo-dummy-emails", "Unread->%v", func (c *wi.Component) any {
+    windicators.NewComponent(iw, "demo-dummy-emails", "Unread->%v", func (c *windicators.Component) any {
         unreadCount := myFuncFetchEmails()
         c.IsVisible = unreadCount > 0
         return unreadCount
     }, 5*time.Second)
     
     // Ready!
-    wi.Run()
+    iw.Run()
 }
 
 // This is dummy function just to demonstrate something is done 
@@ -39,14 +39,14 @@ func myFuncFetchEmails() int {
 
 #### Text colors
 ```go
-	c := wi.NewComponent(iw, "demo-dummy-emails", "Unread->%v", func(c *wi.Component) any {
+	c := windicators.NewComponent(iw, "demo-dummy-emails", "Unread->%v", func(c *windicators.Component) any {
 		unreadCount := myFuncFetchEmails()
 		c.IsVisible = unreadCount > 0
 		return unreadCount
 	}, 5*time.Second)
 
 	c.Font.SetColor(.2, 1.0, .4, 1)
-	c.OnClick = func(c *wi.Component) {
+	c.OnClick = func(c *windicators.Component) {
 		log.Printf("[%s] Click callback...", c.ID)
 	}
 
@@ -63,7 +63,7 @@ type IndicatorWindow struct {
 
 ## Example to dynamically change colors
 ```go
-	wi.NewComponent(iw, "demo-rand-status", "Status=%v", func(c *wi.Component) any {
+	windicators.NewComponent(iw, "demo-rand-status", "Status=%v", func(c *windicators.Component) any {
 		// simulate some background job/api call
 		r := rand.Intn(5)
 
