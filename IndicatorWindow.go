@@ -194,7 +194,7 @@ func (iw *IndicatorWindow) ListenEvents() {
 
 			// hitbox
 			if !c.InPos(float32(posX), float32(posY)) {
-				return
+				continue
 			}
 
 			// trigger component callback

@@ -101,8 +101,14 @@ func (c *Component) String() string {
 	return fmt.Sprintf(c.Format, c.Value)
 }
 
+// debugString ..
+func (c *Component) debugString() string {
+	return fmt.Sprintf("[%s] [vis=%v][val=%v] (%v;%v) %v", c.ID, c.IsVisible, c.IsValid(), c.X, c.Y, c.Value)
+}
+
 // InPos ..
 func (c *Component) InPos(posX, posY float32) bool {
+	// log.Println(c.debugString())
 	if !c.IsVisible || !c.IsValid() {
 		return false
 	}
