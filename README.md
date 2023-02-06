@@ -92,3 +92,4 @@ type IndicatorWindow struct {
 - [ ] Add real-life examples under `examples/` folder
 - [ ] Before/After render hooks
 - [ ] Loading and Minimized views
+- [ ] Be aware of multiple monitors
