@@ -92,6 +92,23 @@ Then fine tune with `iw.MoveTo(x,y)`:
     iw.MoveTo(iw.Position.X - 100, iw.Position.Y + 60)
 ```
 
+### Click callback
+Assign component `OnClick` callback to do something special.
+```go
+wi.NewComponent(iw, "demo-rand", "Demo(%v)", func(c *wi.Component) any {
+    // simulate some background job/api call
+    r := rand.Int31n(10)
+    c.IsVisible = r > 0 // when to show
+    c.Data = fmt.Sprintf("http://localhost?mydata=%d",r)
+    return r            // return value
+}, 15*time.Minute)
+
+c.OnClick = func(c *windicators.Component) {
+	log.Printf("[%s] Click", c.ID)
+	log.Printf("Open URL `%s`", c.Data.(string)) // --> http://localhost?mydata=2
+}
+
+```
 
 ### TODO's
 - [ ] Test/Fix for other OS's

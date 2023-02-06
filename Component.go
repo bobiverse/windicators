@@ -23,6 +23,7 @@ type Component struct {
 	*ComponentMetrics
 
 	OnClick func(c *Component)
+	Data    any // use to save data for `OnClick` or other uses
 }
 
 // NewComponent ..
