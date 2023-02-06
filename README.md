@@ -90,3 +90,5 @@ type IndicatorWindow struct {
 - [ ] Window auto resize for indicators visible
 - [ ] Vertical display
 - [ ] Add real-life examples under `examples/` folder
+- [ ] Before/After render hooks
+- [ ] Loading and Minimized views
