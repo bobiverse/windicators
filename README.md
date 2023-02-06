@@ -85,6 +85,14 @@ type IndicatorWindow struct {
 ```
 ![](demo.gif)
 
+### Predefined positions and offset
+First use one of these: `PositionCenterTop`, `PositionRightTop`, `PositionRightCenter`, `PositionRightBottom`, `PositionCenterBottom`, `PositionLeftBottom`, `PositionLeftCenter`, `PositionLeftTop`.  
+Then fine tune with `iw.MoveTo(x,y)`:
+```go
+    iw.MoveTo(iw.Position.X - 100, iw.Position.Y + 60)
+```
+
+
 ### TODO's
 - [ ] Test/Fix for other OS's
 - [ ] Window auto resize for indicators visible
