@@ -83,6 +83,4 @@ type IndicatorWindow struct {
 		return status              // return value
 	}, 2*time.Second)
 ```
-
-![](demo3.png)
-![](demo4.png)
+![](demo.gif)
