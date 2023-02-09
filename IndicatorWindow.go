@@ -106,8 +106,8 @@ func (iw *IndicatorWindow) Draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 	// Show default view with some active indicators
-	if iw.GetOpacity() != 0.7 {
-		iw.SetOpacity(0.7)
+	if iw.GetOpacity() != 0.5 {
+		iw.SetOpacity(0.5)
 		iw.SetSize(int(iw.Width), int(iw.Height))
 		iw.SwapBuffers()
 	}
@@ -119,7 +119,11 @@ func (iw *IndicatorWindow) Draw() {
 			continue
 		}
 		x := float32(ix)*oneComponentWidth + (oneComponentWidth / 2) - float32(c.Width)/2
-		c.DrawText(x, float32(iw.Height/2))
+		y := float32(iw.Height / 2)
+		c.RecalcFor(x, y, c.String())
+		if c.IsValid() {
+			c.DrawText(x, y)
+		}
 	}
 
 	iw.SwapBuffers()

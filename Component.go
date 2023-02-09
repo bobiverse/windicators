@@ -55,6 +55,17 @@ func NewComponent(iw *IndicatorWindow, id, format string, fnCheck func(c *Compon
 		}
 	}(c)
 
+	// check same ID
+	sameIDCount := 0
+	for _, c2 := range iw.components {
+		if c.ID == c2.ID {
+			sameIDCount++
+		}
+	}
+	if sameIDCount >= 1 {
+		c.ID += fmt.Sprintf("%d", sameIDCount+1)
+	}
+
 	iw.components = append(iw.components, c)
 	return c
 }
@@ -66,14 +77,13 @@ func (c *Component) IsClickable() bool {
 
 // Check ..
 func (c *Component) Check() {
-	oldValue := c.Value
+	// oldValue := c.Value
 	c.Value = c.fnCheck(c)
-	// log.Printf("[%s] Check.. [%v] ==> [%v]", c.ID, oldValue, c.Value)
 
 	// must redraw if changed
-	if c.Value != oldValue {
-		c.parentWindow.chRedraw <- true
-	}
+	// if c.Value != oldValue {
+	c.parentWindow.chRedraw <- true
+	// }
 }
 
 // DrawText ..
@@ -103,7 +113,7 @@ func (c *Component) String() string {
 
 // debugString ..
 func (c *Component) debugString() string {
-	return fmt.Sprintf("[%s] [vis=%v][val=%v] (%v;%v) %v", c.ID, c.IsVisible, c.IsValid(), c.X, c.Y, c.Value)
+	return fmt.Sprintf("[%s]=%-5v\t [VALID=%5v][VISIBLE=%5v][VALUE=%5v] XY(%v;%v) FB(%v;%v)", c.ID, c.Value, c.IsValid(), c.IsVisible, c.IsValid(), c.X, c.Y, c.FontSize, c.Baseline)
 }
 
 // InPos ..
@@ -113,9 +123,9 @@ func (c *Component) InPos(posX, posY float32) bool {
 		return false
 	}
 
-	x, y, x2, y2 := c.CoordinatesWithPadding(2, 10, 2, 10)
+	// x, y, x2, y2 := c.CoordinatesWithPadding(2, 10, 2, 10)
 
-	hitX := posX >= x && posX <= x2
-	hitY := posY >= y && posY <= y2
+	hitX := posX >= c.X && posX <= c.X2
+	hitY := posY >= c.Y && posY <= c.Y2
 	return hitX && hitY
 }
