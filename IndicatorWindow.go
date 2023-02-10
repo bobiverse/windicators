@@ -2,7 +2,6 @@ package windicators
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -39,10 +38,17 @@ func NewIndicatorWindow(width, height, position uint) (*IndicatorWindow, error) 
 		return nil, err
 	}
 
+	fmt.Printf("glfw version %d.%d.%d\n",
+		glfw.VersionMajor, glfw.VersionMinor, glfw.VersionRevision)
+
 	glfw.WindowHint(glfw.Resizable, glfw.True)
 	glfw.WindowHint(glfw.Floating, glfw.True)
 	glfw.WindowHint(glfw.Decorated, glfw.False)
 	glfw.WindowHint(glfw.FocusOnShow, glfw.False)
+	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
+	glfw.WindowHint(glfw.ContextVersionMajor, 3)
+	glfw.WindowHint(glfw.ContextVersionMinor, 2)
+	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 
 	screenW, screenH := glfwScreenSize()
 
@@ -70,7 +76,7 @@ func NewIndicatorWindow(width, height, position uint) (*IndicatorWindow, error) 
 
 	// load default font
 	defaultFontPath := filepath.Join(os.TempDir(), "goregular.ttf") // make pull request to  `glfont` to include `LoadBytes`
-	if err := ioutil.WriteFile(defaultFontPath, goregular.TTF, 0600); err != nil {
+	if err := os.WriteFile(defaultFontPath, goregular.TTF, 0600); err != nil {
 		return nil, err
 	}
 	var fontSize uint = 12
@@ -81,7 +87,7 @@ func NewIndicatorWindow(width, height, position uint) (*IndicatorWindow, error) 
 	font.SetColor(1, 1, 1, 1) // r,g,b,a font color
 
 	// window position on screen
-	iw.MoveTo(int(iw.Position.X), int(iw.Position.Y))
+	iw.MoveTo(iw.Position.X, iw.Position.Y)
 
 	iw.ListenEvents()
 	return iw, nil
@@ -136,6 +142,7 @@ func (iw *IndicatorWindow) IsRunning() bool {
 
 // Run ..
 func (iw *IndicatorWindow) Run() error {
+	fmt.Println(iw)
 	iw.chRedraw = make(chan bool)
 
 	// No need for superfast recheck
