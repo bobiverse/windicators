@@ -28,6 +28,9 @@ type IndicatorWindow struct {
 
 	// internal channel to signal redraw only when necessary
 	chRedraw chan bool
+
+	// Hooks
+	CustomDraw func(list ComponentList)
 }
 
 // NewIndicatorWindow ..
@@ -93,12 +96,14 @@ func (iw *IndicatorWindow) Draw() {
 		return
 	}
 
+	// always swap buffers in redraw
+	defer iw.SwapBuffers()
+
 	// No info, hide
 	if iw.components.IsAllHidden() {
 		// do not use `iw.Hide()/iw.Show()` as it focuses window and interrupts user
 		iw.SetOpacity(0)
 		iw.SetSize(1, 1)
-		iw.SwapBuffers()
 		return
 	}
 
@@ -109,9 +114,15 @@ func (iw *IndicatorWindow) Draw() {
 	if iw.GetOpacity() != 0.5 {
 		iw.SetOpacity(0.5)
 		iw.SetSize(int(iw.Width), int(iw.Height))
-		iw.SwapBuffers()
 	}
 
+	// users custom drawing
+	if iw.CustomDraw != nil {
+		iw.CustomDraw(iw.components)
+		return
+	}
+
+	// Default redraw
 	// split available space in sectors and center each component inside
 	oneComponentWidth := float32(iw.Width) / float32(len(iw.components))
 	for ix, c := range iw.components {
@@ -126,7 +137,6 @@ func (iw *IndicatorWindow) Draw() {
 		}
 	}
 
-	iw.SwapBuffers()
 }
 
 // IsRunning - if channel is active then window is started
