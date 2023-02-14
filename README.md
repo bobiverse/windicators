@@ -6,7 +6,7 @@ Use your own _jobs_: API calls, bash scripts etc. for component data source.
 _Tested on Ubuntu and MacOS (intel and apple silicon)_.
 
 #### Dependencies
-This package requires some OS dependencies because of some C bindings.\
+This package requires some OS dependencies because of some C bindings.
 
 Ubuntu:
 ```
