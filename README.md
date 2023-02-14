@@ -3,14 +3,31 @@ Simple GUI indicators for desktop (discrete, no blinking).
 Hidden until one of the indicators are valid for display.  
 Use your own _jobs_: API calls, bash scripts etc. for component data source.
 
-_Tested on Ubuntu_.
+_Tested on Ubuntu and MacOS (intel and apple silicon)_.
+
+#### Dependencies
+This package requires some OS dependencies because of some C bindings.\
+
+Ubuntu:
+```
+sudo apt install libgl1-mesa-dev xorg-dev
+```
+
+MacOS:
+```
+xcode-select --install
+```
 
 #### Example
 ```go
 func main() {
     // Define window size and position
-    iw, _ := windicators.NewIndicatorWindow(200, 20, windicators.PositionCenterBottom)
-    defer glfw.Terminate()
+    iw, err := windicators.NewIndicatorWindow(200, 20, windicators.PositionCenterBottom)
+    if err != nil {
+        log.Fatalf("new window error: %s", err)
+    }
+    
+    defer iw.Terminate()
     
     // First indicator component 
     windicators.NewComponent(iw, "demo-rand", "Demo(%v)", func (c *windicators.Component) any {
@@ -36,6 +53,8 @@ func myFuncFetchEmails() int {
 }
 ```
 ![](demo.png)
+
+Full demo can be found in example directory.
 
 #### Text colors
 ```go
