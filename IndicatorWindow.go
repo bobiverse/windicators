@@ -38,9 +38,6 @@ func NewIndicatorWindow(width, height, position uint) (*IndicatorWindow, error) 
 		return nil, err
 	}
 
-	fmt.Printf("glfw version %d.%d.%d\n",
-		glfw.VersionMajor, glfw.VersionMinor, glfw.VersionRevision)
-
 	glfw.WindowHint(glfw.Resizable, glfw.True)
 	glfw.WindowHint(glfw.Floating, glfw.True)
 	glfw.WindowHint(glfw.Decorated, glfw.False)
@@ -142,7 +139,6 @@ func (iw *IndicatorWindow) IsRunning() bool {
 
 // Run ..
 func (iw *IndicatorWindow) Run() error {
-	fmt.Println(iw)
 	iw.chRedraw = make(chan bool)
 
 	// No need for superfast recheck
@@ -213,4 +209,13 @@ func (iw *IndicatorWindow) ListenEvents() {
 		}
 
 	})
+}
+
+// Terminate window and clean up resources.
+// Must be called whenever program exists - on success or on error.
+// There is no need to call this function if IndicatorWindow creation fails.
+func (iw *IndicatorWindow) Terminate() {
+	// Must be called from main OS thread.
+	runtime.LockOSThread()
+	glfw.Terminate()
 }
