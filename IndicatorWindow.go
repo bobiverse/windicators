@@ -2,7 +2,6 @@ package windicators
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -43,6 +42,10 @@ func NewIndicatorWindow(width, height, position uint) (*IndicatorWindow, error) 
 	glfw.WindowHint(glfw.Floating, glfw.True)
 	glfw.WindowHint(glfw.Decorated, glfw.False)
 	glfw.WindowHint(glfw.FocusOnShow, glfw.False)
+	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
+	glfw.WindowHint(glfw.ContextVersionMajor, 3)
+	glfw.WindowHint(glfw.ContextVersionMinor, 2)
+	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 
 	screenW, screenH := glfwScreenSize()
 
@@ -70,7 +73,7 @@ func NewIndicatorWindow(width, height, position uint) (*IndicatorWindow, error) 
 
 	// load default font
 	defaultFontPath := filepath.Join(os.TempDir(), "goregular.ttf") // make pull request to  `glfont` to include `LoadBytes`
-	if err := ioutil.WriteFile(defaultFontPath, goregular.TTF, 0600); err != nil {
+	if err := os.WriteFile(defaultFontPath, goregular.TTF, 0600); err != nil {
 		return nil, err
 	}
 	var fontSize uint = 12
@@ -81,7 +84,7 @@ func NewIndicatorWindow(width, height, position uint) (*IndicatorWindow, error) 
 	font.SetColor(1, 1, 1, 1) // r,g,b,a font color
 
 	// window position on screen
-	iw.MoveTo(int(iw.Position.X), int(iw.Position.Y))
+	iw.MoveTo(iw.Position.X, iw.Position.Y)
 
 	iw.ListenEvents()
 	return iw, nil
@@ -206,4 +209,13 @@ func (iw *IndicatorWindow) ListenEvents() {
 		}
 
 	})
+}
+
+// Terminate window and clean up resources.
+// Must be called whenever program exists - on success or on error.
+// There is no need to call this function if IndicatorWindow creation fails.
+func (iw *IndicatorWindow) Terminate() {
+	// Must be called from main OS thread.
+	runtime.LockOSThread()
+	glfw.Terminate()
 }
